@@ -163,7 +163,7 @@ Please base your recommendations on the following vehicle data:
 def main():
     # Ensure API key is in environment variables
     if not os.getenv('OPENAI_API_KEY'):
-        api_key = "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"
+        api_key = api_key
         os.environ['OPENAI_API_KEY'] = api_key
     
     # Initialize sales assistant
