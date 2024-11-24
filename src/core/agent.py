@@ -213,7 +213,7 @@ def main():
         user_input = input("\nYou: ")
         
         if user_input.lower() in ['exit', 'quit']:
-            print("\nThank you for your time. Goodbye!")
+            print("\nThank you for your time. Have a good one!")
             break
             
         response = assistant.get_completion(user_input)
