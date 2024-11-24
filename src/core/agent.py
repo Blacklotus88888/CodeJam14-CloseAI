@@ -27,7 +27,7 @@ class CarSalesAssistant:
         
     def create_system_prompt(self) -> str:
         """Create optimized system prompt for the AI"""
-        base_prompt = """You are Hennyi, an experienced car salesperson who is professional, adaptive, and focused on closing deals. Your responses should be brief but impactful, always aiming to move the conversation towards a sale while maintaining authenticity.
+        base_prompt = """You are Hennyi, an experienced car salesperson who is professional, adaptive, and focused on closing deals. When introducing yourself, always use your name Hennyi. Your responses should be brief but impactful, always aiming to move the conversation towards a sale while maintaining authenticity.
 
 [CRITICAL RULE: Only recommend vehicles that exist in the provided csv file.]
 
@@ -58,12 +58,14 @@ Core Response Behaviors:
 
 1. Response Style
 - Keep all responses under 3 sentences unless specifically asked for details
+- Always shows three possible options
 - Lead with the most relevant information first
 - Use natural, conversational language
 - Maintain professionalism even when faced with casual or rude behavior
 
 2. Sales Strategy
 - Always include price ranges when mentioning specific models
+- When introducing specific models, always bring proper length of details
 - Respond to budget-related keywords (like "broke", "expensive", "cheap") with appropriate options
 - When lacking inventory information, focus on general recommendations and invite store visits
 - Look for opportunities to suggest viewing available vehicles in person
@@ -73,6 +75,7 @@ Core Response Behaviors:
 - Handle non-serious queries (like jokes) with brief, friendly responses before steering back to sales
 - For unclear requests, provide one quick clarification question followed by a suggestion
 - When faced with rudeness, respond once professionally then wait for serious queries
+- When customer shows interest in test drives, guide them to use the Appointment button
 
 4. Information Hierarchy
 - Price -> Features -> Technical details
@@ -82,6 +85,7 @@ Core Response Behaviors:
 
 5. Closing Techniques
 - End each response with a subtle call to action
+- When suggesting test drives, specifically mention the "Appointment" button for easy scheduling
 - Suggest store visits or test drives when interest is shown
 - Provide clear next steps for interested customers
 - Be direct about availability and options
@@ -112,6 +116,7 @@ Response Templates:
 - For rude comments: Make a joke and then steer the conversation to sales
 - For specific vehicle interests: Price range + key features + next step
 - For general queries: 2-3 options with price ranges + simple comparison
+- For test drive inquiries: Mention the "Appointment" button convenience (e.g., "Feel free to click the Appointment button above to schedule your test drive!")
 
 When suggesting vehicles, use this format:
 Brand Model Name Price Range Key Benefit Available Action
@@ -125,34 +130,60 @@ Please base your recommendations on the following vehicle data:
         
     def get_completion(self, user_query: str) -> str:
         """Get response from OpenAI API"""
-        messages = [
-            {
-                "role": "system", 
-                "content": self.create_system_prompt()
-            }
-        ]
-        
-        # Add conversation history
-        messages.extend(self.conversation_history)
-        
-        # Add user's new question
-        messages.append({"role": "user", "content": user_query})
-        
         try:
-            completion = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages
-            )
+            # Keep only last 5 conversation turns to limit tokens
+            if len(self.conversation_history) > 10:  # 5 turns = 10 messages (user + assistant)
+                self.conversation_history = self.conversation_history[-10:]
             
-            # Get AI response
-            ai_response = completion.choices[0].message.content
+            messages = [
+                {
+                    "role": "system", 
+                    "content": self.create_system_prompt()
+                }
+            ]
             
-            # Update conversation history
-            self.conversation_history.append({"role": "user", "content": user_query})
-            self.conversation_history.append({"role": "assistant", "content": ai_response})
+            # Add conversation history
+            messages.extend(self.conversation_history)
             
-            return ai_response
+            # Add user's new question
+            messages.append({"role": "user", "content": user_query})
             
+            try:
+                completion = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
+                    max_tokens=150  # Limit response length
+                )
+                
+                # Get AI response
+                ai_response = completion.choices[0].message.content
+                # Update conversation history
+                self.conversation_history.append({"role": "user", "content": user_query})
+                self.conversation_history.append({"role": "assistant", "content": ai_response})
+                
+                return ai_response
+                
+            except Exception as e:
+                if "rate_limit_exceeded" in str(e):
+                    # Fallback to minimal context if rate limit is hit
+                    minimal_messages = [
+                        {
+                            "role": "system",
+                            "content": "You are Hennyi, a professional car salesperson. Be brief and direct."
+                        },
+                        {"role": "user", "content": user_query}
+                    ]
+                    
+                    completion = self.client.chat.completions.create(
+                        model=self.model,
+                        messages=minimal_messages,
+                        max_tokens=100
+                    )
+                    
+                    return completion.choices[0].message.content
+                else:
+                    raise e
+                    
         except Exception as e:
             return f"Sorry, an error occurred: {str(e)}"
             
@@ -170,9 +201,10 @@ def main():
     assistant = CarSalesAssistant()
     
     # Load car data
-    csv_path = r"/Users/dudukoo/Downloads/CodeJam14-CloseAI-main/src/modelTrain/cars.csv"
+    csv_path = csv_path
     
-    print("\nCar Sales Assistant is ready!")
+    print("\nCar Sales Assistant is here!")
+    print("\nHi, how can I help you today?")
     print("You can ask about vehicle recommendations, specifications, pricing, and more.")
     print("Type 'exit' to end the conversation.")
     
