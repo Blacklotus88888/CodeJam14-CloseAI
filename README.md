@@ -34,12 +34,14 @@ Maestro combines:
 2. Enhanced **personalization capabilities** to tailor recommendations.
 3. Real-time **inventory synchronization** for accuracy.
 4. **Multi-language support** to cater to a global audience.
+5. Possaible migration to the langGraph framework to intergrate agentic workload to out application.
+6. implement interface for users to upgrade car inventory list and retain the reteivor when needed with a click o a button
 
 ---
 
 ## Get Started
 Stay tuned for updates and contributions to make Maestro even more robust and versatile!
-
-
+---
+#UI Photos
 
 ![image](https://github.com/user-attachments/assets/103b0d88-e94f-4c80-bb68-0af05680b3be)
