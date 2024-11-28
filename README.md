@@ -12,12 +12,12 @@ Maestro leverages cutting-edge RAG (Retrieval-Augmented Generation) technology t
 
 ## How We Built It
 Maestro combines:
-- **Advanced RAG technology** for retrieving relevant information.
+- RAG technology **OpenAI API** as Genetor and self made sentence transformer as retiever.
 - A **five-layer prompt architecture** for structured and natural interactions.
 - **Sentence transformers** to intelligently search and recommend from inventory.
 - **Professional sales knowledge integration** for consistent and expert-level service.
 - **Context management** to maintain conversational flow and relevancy.
-- **OpenAI API as Genetor and self made sentence transformer as retiever.
+- **OpenAI API** as Genetor and self made sentence transformer as retiever.
 
 ## Challenges We Faced
 1. **Balancing similarity thresholds** for relevant recommendations.
@@ -40,8 +40,8 @@ Maestro combines:
 
 ---
 
-# Get Started
-Stay tuned for updates and contributions to make Maestro even more robust and versatile!
+#Get Started
+how to build......
 ---
 #UI Photos
 
