@@ -40,9 +40,10 @@ Maestro combines:
 
 ---
 
-## Get Started
+# Get Started
 Stay tuned for updates and contributions to make Maestro even more robust and versatile!
 ---
 #UI Photos
 
 ![image](https://github.com/user-attachments/assets/103b0d88-e94f-4c80-bb68-0af05680b3be)
+![image](https://github.com/user-attachments/assets/217deceb-fa49-4d28-9a3d-7e3656345ee6)
