@@ -17,6 +17,7 @@ Maestro combines:
 - **Sentence transformers** to intelligently search and recommend from inventory.
 - **Professional sales knowledge integration** for consistent and expert-level service.
 - **Context management** to maintain conversational flow and relevancy.
+- **OpenAI API as Genetor and self made sentence transformer as retiever.
 
 ## Challenges We Faced
 1. **Balancing similarity thresholds** for relevant recommendations.
@@ -35,7 +36,7 @@ Maestro combines:
 3. Real-time **inventory synchronization** for accuracy.
 4. **Multi-language support** to cater to a global audience.
 5. Possaible migration to the langGraph framework to intergrate agentic workload to out application.
-6. implement interface for users to upgrade car inventory list and retain the reteivor when needed with a click o a button
+6. Implement interface for users to upgrade car inventory list.
 
 ---
 
